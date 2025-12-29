@@ -1,6 +1,10 @@
 import { isNoteInside, Line, xyFromEvent } from "./canvas-utils.js";
 import { InvestigatorPen } from "./core.js";
 
+function controlledNotesCount() {
+  return Array.isArray(canvas?.notes?.controlled) ? canvas.notes.controlled.length : 0;
+}
+
 // Inject tool into notes controls
 Hooks.on("getSceneControlButtons", (buttons) => {
   InvestigatorPen.onGetSceneControlButtons(buttons);
@@ -45,7 +49,7 @@ Hooks.on("libWrapper.Ready", () => {
     "Note.prototype._onDragLeftStart",
     function (wrapped, ...args) {
       if (game.activeTool === "drawEdge") {
-        if (canvas.notes.controlledObjects.size === 1) {
+        if (controlledNotesCount() === 1) {
           InvestigatorPen.state.originNote = this;
           InvestigatorPen.state.pixiLine = new Line(this.center);
           const spot = this.center;
@@ -65,7 +69,7 @@ Hooks.on("libWrapper.Ready", () => {
     "Note.prototype._onDragLeftMove",
     (wrapped, event) => {
       if (game.activeTool === "drawEdge") {
-        if (canvas.notes.controlledObjects.size === 1) {
+        if (controlledNotesCount() === 1) {
           const spot = xyFromEvent(event);
           InvestigatorPen.state.pixiLine.update(spot);
           return;
@@ -90,14 +94,14 @@ Hooks.on("libWrapper.Ready", () => {
     "investigator-pen",
     "Note.prototype._onDragLeftDrop",
     async (wrapped, event) => {
-      if (
-        game.activeTool === "drawEdge" &&
-        canvas.notes.controlledObjects.size === 1
-      ) {
-        _onDragLeftDrop(event);
-      } else {
-        return wrapped(event);
-      }
+if (
+  game.activeTool === "drawEdge" &&
+  controlledNotesCount() === 1
+) {
+  _onDragLeftDrop(event);
+} else {
+  return wrapped(event);
+}
     },
     "MIXED"
   );
