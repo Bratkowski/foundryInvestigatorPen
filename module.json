@@ -1,14 +1,27 @@
 {
   "id": "investigator-pen",
   "title": "Cthulhu Investigator Pen",
+  "description": "Inteligentne pióro dla gracza łączące linie między notatkami w systemie Call of Cthulhu 7e dla Foundry VTT.",
+  "version": "0.0.1",
+  "authors": [{ "name": "Aleksander Bratkowski" }],
+
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
+  },
+
+  "relationships": {
+    "requires": [
+      { "id": "lib-wrapper", "type": "module" }
+    ]
+  },
+
+  "socket": true,
+
+  "esmodules": ["hooks.js"],
+
   "url": "https://github.com/Bratkowski/foundryInvestigatorPen",
   "manifest": "https://raw.githubusercontent.com/Bratkowski/foundryInvestigatorPen/main/module.json",
-  "download": "https://github.com/Bratkowski/foundryInvestigatorPen/archive/refs/heads/main.zip",
-  "description": "Inteligentne pióro dla gracza łączące linie między notatkamisystemie Call of Cthulhu 7e dla Foundry VTT.",
-  "version": "0.0.01",
-  "authors": [{ "name": "Aleksander Bratkowski" }],
-  "compatibility": { "minimum": "12", "verified": "13" },
-  "scripts": ["main.js"],
-  "styles": ["styles.css"],
-  "socket": true
+  "download": "https://github.com/Bratkowski/foundryInvestigatorPen/archive/refs/heads/main.zip"
 }
