@@ -4,6 +4,7 @@ import { InvestigatorPen } from "./core.js";
 function controlledNotesCount() {
   return Array.isArray(canvas?.notes?.controlled) ? canvas.notes.controlled.length : 0;
 }
+  console.log("controlledNotesCount", controlledNotesCount()); 
 
 // Inject tool into notes controls
 Hooks.on("getSceneControlButtons", (buttons) => {
