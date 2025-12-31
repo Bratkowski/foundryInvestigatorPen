@@ -1,36 +1,41 @@
 export function xyFromEvent(event) {
-
-  const d = event?.interactionData?.destination
-    ?? event?.interactionData?.origin
-    ?? event?.data?.getLocalPosition?.(canvas.app.stage);
+  const d =
+    event?.interactionData?.destination ??
+    event?.interactionData?.origin ??
+    event?.data?.getLocalPosition?.(canvas.app.stage);
 
   if (!d) return { x: 0, y: 0 };
-
   return { x: d.x, y: d.y };
 }
 
 export function isNoteInside(note, { x, y }) {
-  // note can be a Note (Placeable) or NoteDocument in some contexts.
+  // note can be a Note (Placeable) or NoteDocument
   const obj = note?.object ?? note;
 
-  // Best case: PIXI bounds exist
+  // PIXI bounds (najlepszy przypadek)
   const bounds = obj?.bounds ?? obj?._bounds;
   if (bounds?.contains) return bounds.contains(x, y);
 
-  // Fallback: approximate a small hitbox around its position/center
+  // Fallback: hitbox wokół środka
   const cx = obj?.center?.x ?? obj?.x ?? 0;
   const cy = obj?.center?.y ?? obj?.y ?? 0;
 
-  const half = 24; // heuristic hit radius; tweak if needed
-  return x >= cx - half && x <= cx + half && y >= cy - half && y <= cy + half;
+  const half = 24; // OK heurystyka
+  return (
+    x >= cx - half &&
+    x <= cx + half &&
+    y >= cy - half &&
+    y <= cy + half
+  );
 }
 
 export class Line extends PIXI.Graphics {
   constructor({ x, y }) {
     super();
+
     this.style = {
       width: 5,
-      color: 0xFF0000, // use number for PIXI
+      color: 0xff0000,
     };
 
     this.origin = { x, y };
@@ -38,14 +43,26 @@ export class Line extends PIXI.Graphics {
   }
 
   update({ x, y }) {
-    this.clear();
+    super.clear();
     this.lineStyle(this.style.width, this.style.color);
     this.moveTo(this.origin.x, this.origin.y);
     this.lineTo(x, y);
   }
 
-  clear() {
+  /** 
+   * Czyści rysunek, ale NIE niszczy obiektu
+   */
+  clearLine() {
     super.clear();
+  }
+
+  /**
+   * Jedyny poprawny sposób niszczenia linii
+   */
+  destroyLine() {
+    try {
+      super.clear();
+    } catch (_) {}
     this.destroy({ children: true });
   }
 }
