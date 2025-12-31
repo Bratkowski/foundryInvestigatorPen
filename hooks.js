@@ -4,7 +4,7 @@ import { InvestigatorPen } from "./core.js";
 function controlledNotesCount() {
   return Array.isArray(canvas?.notes?.controlled) ? canvas.notes.controlled.length : 0;
 }
-  console.log("controlledNotesCount", controlledNotesCount()); 
+
 
 // Inject tool into notes controls
 Hooks.on("getSceneControlButtons", (buttons) => {
@@ -57,6 +57,7 @@ Hooks.on("libWrapper.Ready", () => {
           InvestigatorPen.state.pixiLine.update(spot);
           return;
         } else {
+  console.log("controlledNotesCount", controlledNotesCount()); 
           ui.notifications.warn(`You must have only 1 note selected.`);
         }
       } else {
